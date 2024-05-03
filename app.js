@@ -55,7 +55,7 @@ app.use(
       'difficulty',
       'price',
     ],
-  }),
+  })
 );
 
 // serving static file
