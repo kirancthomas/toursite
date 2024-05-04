@@ -44,11 +44,11 @@ body {
 }
 
 .main {
-  background-color: #f7f7f7;
-  padding: 8rem 6rem;
+  background-color: #fefefe;
+  padding-bottom: 0rem;
   -webkit-box-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
+  /* -ms-flex: 1; */
+  /* flex: 1; */
   position: relative;
 }
 
@@ -324,6 +324,9 @@ body {
 }
 .header__logo img {
   height: 3.5rem;
+  /* display: flex; */
+  /* margin-left: -21rem; */
+  
 }
 @media only screen and (max-width: 62.5em) {
   .header__logo {
@@ -796,7 +799,7 @@ body {
 
 .footer {
   background-color: #f7f7f7;
-  padding: 6rem 4rem 3rem 4rem;
+  padding: 3rem 4rem 3rem 4rem;
   font-size: 1.4rem;
   display: grid;
   grid-template-columns: auto auto;

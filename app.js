@@ -1,4 +1,5 @@
 //const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -13,10 +14,17 @@ const AppError = require('./utils/appError');
 const tourRouter = require('./routes/tourRouter');
 const userRouter = require('./routes/userRouter');
 const reviewRouter = require('./routes/reviewRouter');
+const viewRouter = require('./routes/viewRouter');
+
 
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('viwes', path.join(__dirname, 'views'))
+
 //1) GLOBAL MIDDLEWARE
+// serving static file
+app.use(express.static(path.join(__dirname, 'public')));
 
 // set security http headers
 app.use(helmet());
@@ -58,8 +66,7 @@ app.use(
   })
 );
 
-// serving static file
-app.use(express.static(`${__dirname}/public`));
+
 
 // Test middleware
 app.use((req, res, next) => {
@@ -70,6 +77,7 @@ app.use((req, res, next) => {
 
 // 3) ROUTES
 
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
