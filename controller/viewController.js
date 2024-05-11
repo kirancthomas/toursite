@@ -1,7 +1,8 @@
 const { default: slugify } = require('slugify');
 const Tour = require('../models/tourModels');
 const catchAsync = require('../utils/catchAsync');
-const Review = require('../models/reviewModel');
+const AppError = require('../utils/appError');
+
 
 exports.overView = catchAsync(async (req, res, next) => {
   //1) get all tour data
@@ -15,26 +16,30 @@ exports.overView = catchAsync(async (req, res, next) => {
     });
 });
 
-exports.tour = (req, res) => {
-  res.status(200).render('tour', {
-    title: 'The Forest Hiker Tour'
-  })
-};
 
 exports.getTour = catchAsync(async (req, res, next) => {
   //1) get the data from the requested tour(including Reviews, Guides)
   const tour = await Tour.findOne({slug: req.params.slug}).populate({
     path: 'reviews',
-    fields: 'review rating user'
+    fields: 'review rating user photo'
   })
-  //2) Build the template
-
-  //3) Render the template using data step 1)
-  
+  if (!tour) {
+    return next(new AppError('There is no tour with that name.', 404));
+  }
   
   
   res.status(200).render('tour', {
-    title: 'The Forest Hiker Tour',
+    title: `${tour.name} Tour`,
     tour
   })
 });
+
+
+exports.getLoginForm = catchAsync( async (req, res) => {
+  
+  res.status(200).render('login',{
+    title: 'Log into Your Account'
+  })
+}
+
+)

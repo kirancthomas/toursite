@@ -1,12 +1,14 @@
 //const fs = require('fs');
 const path = require('path');
+// const cors = require('cors')
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
+// const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 
 const globalErrorHandler = require('./controller/errorController');
 
@@ -19,15 +21,44 @@ const viewRouter = require('./routes/viewRouter');
 
 const app = express();
 
+//app.enable('trust proxy');  
+
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+
 app.set('view engine', 'pug');
 app.set('viwes', path.join(__dirname, 'views'))
 
-//1) GLOBAL MIDDLEWARE
+const cspConfig = {
+  directives: {
+    defaultSrc: ["'self'"],
+    imgSrc: ["'self'", 'data:', 'https://tile.openstreetmap.org/'],
+    scriptSrc: ["'self'", 'https://cdnjs.cloudflare.com'],
+    connectSrc: ["'self'", "ws://127.0.0.1:46009"],
+  }
+};
+
+// Use helmet middleware with merged CSP configuration
+app.use(helmet({
+  contentSecurityPolicy: cspConfig,
+}));
+
+
+
+// const cspConfig = {
+//   directives: {
+//     defaultSrc: ["'self'"],
+//     imgSrc: ["'self'", 'data:', 'https://tile.openstreetmap.org/'],
+//   }
+// };
+
+// // // Use helmet middleware with CSP
+// app.use(helmet({
+//   contentSecurityPolicy: cspConfig,
+// }));
+
 // serving static file
 app.use(express.static(path.join(__dirname, 'public')));
-
-// set security http headers
-app.use(helmet());
 
 //development logging
 if (process.env.NODE_ENV === 'development') {
@@ -45,6 +76,7 @@ app.use('/api', limiter);
 
 //Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
+app.use(cookieParser());
 
 //Data sanitization against NoSQL injection
 app.use(mongoSanitize());
@@ -71,7 +103,7 @@ app.use(
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  //console.log(req.headers);
+  // console.log(req.cookies);
   next();
 });
 

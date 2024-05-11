@@ -39,13 +39,7 @@ const reviewSchema = new Mongoose.Schema(
 reviewSchema.index({ tour: 1, user: 1 }, { unique: true });  // user can't write multiple reviews on a single tour
 
 reviewSchema.pre(/^find/, function(next) {
-  // this.populate({
-  //   path: 'tour',
-  //   select: 'name _id',
-  // }).populate({
-  //   path: 'user',
-  //   select: 'name photo _id',
-  // });
+  
   this.populate({
     path: 'user',
     select: 'name photo _id'

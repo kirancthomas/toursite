@@ -63,7 +63,7 @@ const tourschema = new mongoose.Schema(
       trim: true,
       required: [true, 'A tour must have a description'],
     },
-    Description: {
+    description: {
       type: String,
       trim: true,
     },
@@ -112,12 +112,7 @@ const tourschema = new mongoose.Schema(
         ref: 'User',
       },
     ],
-    // review: [
-    //   {
-    //     type: mongoose.Schema.ObjectId,
-    //     ref: 'Review  ',
-    //   },
-    // ],
+    
   },
   {
     toJSON: { virtuals: true },
