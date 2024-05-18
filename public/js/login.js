@@ -15,7 +15,7 @@ export const login = async (email, password) => {
     });
     // console.log(res.data);
 
-    if(res.data.satus === 'success')   
+    if(res.data.satus || res.data.status === 'success')   
       {
       showAlert('success','Logged in Successfully');
       window.setTimeout(()=> {
@@ -34,7 +34,7 @@ export const logout = async () => {
       method: 'GET',
       url:'http://127.0.0.1:4000/api/v1/users/logout'
     })
-    if(res.data.satus = 'success') location.reload(true);
+    if(res.data.satus || res.data.status === 'success') location.reload(true);
   }catch(err){
     showAlert('error', 'Error Logging Out! Try Again.')
   }
