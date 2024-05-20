@@ -1,31 +1,66 @@
 const nodemailer = require('nodemailer');
+const pug = require('pug');
+const htmlToText = require('html-to-text');
 
-const sendEmail = async (options) => {
-  // 1) create a transporter
-  const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.MAIL_PORT,
-    auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-    // secure: false,
-    // logger: true,
-    // tls: { rejectUnauthorized: true },
-  });
+module.exports = class Email {
+  constructor (user, url){
+    this.to = user.email;
+    this.firstName = user.name.split(' ')[0];
+    this.url = url;
+    this.from = `kiranct <${process.env.EMAIL_FROM}>`
 
-  // 2) define the email options
+  }
 
-  const mailOptions = {
-    from: 'kiranct <user@gmail.info>',
-    to: options.email,
-    subject: options.subject,
-    text: options.message,
-    //html:
-  };
-  // 3) actually send the email
+  newTransport() {
+    if(process.env.NODE_ENV === 'production') {
+      //sendgrid
+      return 1;
+    }
+    return nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: process.env.MAIL_PORT,
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+      
+    });
+  }
+  //send the actual email 
+  async send(template, subject) {
+    //1) render HTML based on a pug template
 
-  await transporter.sendMail(mailOptions);
+     const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
+      firstName: this.firstName,
+      url: this.url,
+      subject
+     })
+
+    //2) Define Email Options
+    const mailOptions = {
+      from: this.from,
+      to: this.to,
+      subject,
+      html,
+      text: htmlToText.fromString(html)
+      //html;
+    };
+
+    // 3) create a transport and send email
+    
+    await this.newTransport().sendMail(mailOptions);
+
+  }
+  
+  async sendWelcome(){
+   await this.send('Welcome', 'welcome to the Natours Family')
+  }
+
+  async sendPassWordRest(){
+    await this.send('passwordReset', 'Your password reset token valid for only 10 minutes')
+  }
 };
 
-module.exports = sendEmail;
+
+
+
