@@ -1,6 +1,8 @@
 const nodemailer = require('nodemailer');
 const pug = require('pug');
 const htmlToText = require('html-to-text');
+const Transport = require("nodemailer-brevo-transport");
+// import Transport from 'nodemailer-brevo-transport';
 
 module.exports = class Email {
   constructor (user, url){
@@ -13,8 +15,17 @@ module.exports = class Email {
 
   newTransport() {
     if(process.env.NODE_ENV === 'production') {
-      //sendgrid
-      return 1;
+      return nodemailer.createTransport({
+        host:'smtp-relay.brevo.com',
+          port:587,
+          secure: false,
+          auth: {
+            user: process.env.BREVO_USERNAME,
+            pass: process.env.BREVO_PASSWORD,
+            },
+          
+      })
+        
     }
     return nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
