@@ -30,33 +30,31 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('viwes', path.join(__dirname, 'views'))
 
-const cspConfig = {
-  directives: {
-    defaultSrc: ["'self'"],
-    imgSrc: ["'self'", 'data:', 'https://tile.openstreetmap.org/'],
-    scriptSrc: ["'self'", 'https://cdnjs.cloudflare.com'],
-    connectSrc: ["'self'", "ws://127.0.0.1:46009"],
-  }
-};
-
-// Use helmet middleware with merged CSP configuration
-app.use(helmet({
-  contentSecurityPolicy: cspConfig,
-}));
-
 
 
 // const cspConfig = {
 //   directives: {
 //     defaultSrc: ["'self'"],
 //     imgSrc: ["'self'", 'data:', 'https://tile.openstreetmap.org/'],
+//     scriptSrc: ["'self'", 'https://cdnjs.cloudflare.com', 'https://js.stripe.com'],
+//     connectSrc: ["'self'", "ws://127.0.0.1:46009", "ws://127.0.0.1:33301"],  // Allow WebSocket connections
+//     frameSrc: ["'self'", 'https://js.stripe.com'],  // Allow framing from Stripe
 //   }
 // };
+const cspConfig = {
+  directives: {
+    defaultSrc: ["'self'"],
+    imgSrc: ["'self'", 'data:', 'https://tile.openstreetmap.org/'],
+    scriptSrc: ["'self'", 'https://cdnjs.cloudflare.com', 'https://js.stripe.com'],
+    connectSrc: ["'self'", "ws://127.0.0.1:46009", "ws://127.0.0.1:33301", "ws://127.0.0.1:34113"],  // Include the new WebSocket URL
+    frameSrc: ["'self'", 'https://js.stripe.com'],  // Allow framing from Stripe
+  }
+};
 
-// // // Use helmet middleware with CSP
-// app.use(helmet({
-//   contentSecurityPolicy: cspConfig,
-// }));
+// Use helmet middleware with CSP
+app.use(helmet({
+  contentSecurityPolicy: cspConfig,
+}));
 
 // serving static file
 app.use(express.static(path.join(__dirname, 'public')));

@@ -35,6 +35,7 @@ exports.getChechoutSession = catchAsync( async (req, res, next) => {
         mode: 'payment',
     });
 
+    console.log(session)
     // 3) Create session as response
     res.status(200).json({
         status: 'success',

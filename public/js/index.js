@@ -1,17 +1,18 @@
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
+// import 'core-js/stable';
+// import 'regenerator-runtime/runtime';
 
 import { login, logout } from './login'
 import { displayMap } from './leaflet';
 import { updateSettings } from './updateSettings';
+import { bookTour } from './stripe';
 
 //DOM ELEMENT
-const leafLet = document.getElementById("map");
+const leafLet = document.getElementById('map');
 const loginForm = document.querySelector('.from--login');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
-
+const bookBtn = document.getElementById('book-tour');
 // VALUES
 
 
@@ -32,6 +33,7 @@ if (loginForm)
         
     });
 if(logOutBtn) logOutBtn.addEventListener('click', logout);
+    console.log(logOutBtn);
 
 if(userDataForm) 
 
@@ -65,3 +67,17 @@ if(userPasswordForm)
            document.getElementById('password').value = '';
            document.getElementById('password-confirm').value = '';
         });
+
+if(bookBtn)
+    bookBtn.addEventListener('click', e => {
+            e.target.textContent = 'processing...';
+            const { tourId }  = e.target.dataset;
+            bookTour(tourId);
+        })
+
+// if (bookBtn)
+//     bookBtn.addEventListener('click', e => {
+//           e.target.textContent = 'Processing...';
+//           const { tourId } = e.target.dataset;
+//           bookTour(tourId);
+//         });

@@ -1,8 +1,11 @@
-
+  import L from 'leaflet';
 
   export const displayMap = locations => {
 
-
+    if (typeof L === 'undefined') {
+      throw new Error('Leaflet library is not available');
+    }
+    
   let map = L.map("map", { zoomControl: false });
 
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
