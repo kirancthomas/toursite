@@ -33,7 +33,7 @@ if (loginForm)
         
     });
 if(logOutBtn) logOutBtn.addEventListener('click', logout);
-    console.log(logOutBtn);
+    // console.log(logOutBtn);
 
 if(userDataForm) 
 

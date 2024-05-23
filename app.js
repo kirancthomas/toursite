@@ -1,6 +1,6 @@
 //const fs = require('fs');
 const path = require('path');
-// const cors = require('cors')
+const cors = require('cors')
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -30,7 +30,8 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('viwes', path.join(__dirname, 'views'))
 
-
+app.use(cors());
+app.options('*', cors());
 
 // const cspConfig = {
 //   directives: {

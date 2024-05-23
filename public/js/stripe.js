@@ -1,27 +1,27 @@
 import axios from 'axios';
 import { showAlert } from './alerts';
-const stripe = Stripe('pk_test_BUkd0ZXAj6m0q0jMyRgBxNns00PPtgvjjr');
+import { loadStripe } from '@stripe/stripe-js';
 
-export const bookTour = async tourId => {
+// Use live mode publishable key
+const stripePromise = loadStripe('pk_test_51PIyVySJOUhjYPMzTjWhgZkOo8tccsgfXw5TYLzyXG5w6Qb65fRRBENt8ocKAqQSDdb5By7cEwuB5GWS4grHbvKP00jL65frxk');
+
+export const bookTour = async (tourId) => {
   try {
-    // 1) Get checkout session from API
-    const session = await axios(
-      `http://127.0.0.1:4000/api/v1/bookings/checkout-session/${tourId}`
-    );
-    console.log(session);
+    // 1) Get checkout session from API (ensure this is a live mode session)
+    const session = await axios.get(`http://127.0.0.1:4000/api/v1/bookings/checkout-session/${tourId}`);
+    // console.log(session);
 
-    // 2) Create checkout form + chanre credit card
+    // 2) Load Stripe.js and redirect to checkout
+    const stripe = await stripePromise;
+
     await stripe.redirectToCheckout({
-      sessionId: session.data.session.id
+      sessionId: session.data.session.id,
     });
   } catch (err) {
     console.log(err);
-    showAlert('error', err);
+    showAlert('error', err.message);
   }
 };
-
-
-
 
 
 

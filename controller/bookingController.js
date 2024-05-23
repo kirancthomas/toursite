@@ -25,7 +25,7 @@ exports.getChechoutSession = catchAsync( async (req, res, next) => {
                     product_data: {
                         name: `${tour.name} Tour`,
                         description: tour.summary,
-                        images: [`${req.protocol}://${req.get('host')}/img/tours/${tour.imageCover}`],
+                        images: [`${req.protocol}://${req.get('host')}/img/tours/${tour.imageCover}`], //images only get when the app or wedsite is live
                     },
                     unit_amount: tour.price * 100,
                 },
@@ -41,4 +41,6 @@ exports.getChechoutSession = catchAsync( async (req, res, next) => {
         status: 'success',
         session,
     });
+    
 });
+
