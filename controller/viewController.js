@@ -1,8 +1,11 @@
 const { default: slugify } = require('slugify');
 const Tour = require('../models/tourModels');
+const Bookings = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const User = require('../models/userModel');
+const Review = require('../models/reviewModel');
+
 
 
 exports.overView = catchAsync(async (req, res, next) => {
@@ -42,13 +45,33 @@ exports.getLoginForm = (req, res) => {
     title: 'Log into Your Account'
   });
 }
+exports.getSignupForm = (req, res) => {
 
+  res.status(200).render('signup', {
+    title: 'Create Your New Account'
+  });
+}
 exports.getAccount = (req, res) => {
   
   res.status(200).render('account',{
     title: 'Your account'
   });
 }
+
+exports.getMyTours = catchAsync(async (req, res, next) => {
+  // 1) find all bookings
+  const bookings = await Bookings.find({ user: req.user.id})
+
+  // 2) find tours with the returnd IDs
+  const tourIDs = bookings.map(el => el.tour);
+  const tours = await Tour.find({ _id: { $in: tourIDs } });
+
+  res.status(200).render('overview', {
+    title: 'My Tours',
+    tours
+  });
+});
+
 
 exports.updateUserData = catchAsync( async (req, res, next) => {
  const updatedUser = await User.findByIdAndUpdate(req.user.id, {

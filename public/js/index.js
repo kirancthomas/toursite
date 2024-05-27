@@ -5,6 +5,7 @@ import { login, logout } from './login'
 import { displayMap } from './leaflet';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
+import { signup } from './signup';
 
 //DOM ELEMENT
 const leafLet = document.getElementById('map');
@@ -13,6 +14,7 @@ const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
 const bookBtn = document.getElementById('book-tour');
+const signupForm = document.querySelector('.form--signup');
 // VALUES
 
 
@@ -75,9 +77,16 @@ if(bookBtn)
             bookTour(tourId);
         })
 
-// if (bookBtn)
-//     bookBtn.addEventListener('click', e => {
-//           e.target.textContent = 'Processing...';
-//           const { tourId } = e.target.dataset;
-//           bookTour(tourId);
-//         });
+if (signupForm)
+
+    signupForm.addEventListener('submit', e => {
+    e.preventDefault();
+    
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const passwordConfirm = document.getElementById('passwordConfirm').value;
+        
+        signup(name, email, password, passwordConfirm);
+            
+        });
