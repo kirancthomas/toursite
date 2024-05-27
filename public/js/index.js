@@ -35,7 +35,7 @@ if (loginForm)
         
     });
 if(logOutBtn) logOutBtn.addEventListener('click', logout);
-    // console.log(logOutBtn);
+    
 
 if(userDataForm) 
 
@@ -45,7 +45,7 @@ if(userDataForm)
             form.append('name', document.getElementById('name').value);
             form.append('email',document.getElementById('email').value);
             form.append('photo',document.getElementById('photo').files[0]);
-            console.log(form);
+            
             
             updateSettings(form ,'data');
         })

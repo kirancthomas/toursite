@@ -5,7 +5,7 @@ export const signup = async (name, email, password, passwordConfirm) => {
     try {
         const res = await axios({
             method: 'POST',
-            url: 'http://127.0.0.1:4000/api/v1/users/signup',
+            url: '/api/v1/users/signup',
             data: {
                 name,
                 email,
@@ -18,7 +18,7 @@ export const signup = async (name, email, password, passwordConfirm) => {
                 {
                 showAlert('success', 'Account created successfully');
                 window.setTimeout(() => {
-                location.assign('http://127.0.0.1:4000/');
+                location.assign('/');
                 }, 1500);
                 
             }
