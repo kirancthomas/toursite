@@ -1,4 +1,3 @@
-//const fs = require('fs');
 const path = require('path');
 const cors = require('cors')
 const express = require('express');
@@ -6,7 +5,7 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
-// const xss = require('xss-clean');
+// const xss = require('xss-clean'); this lib depreciated 
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
@@ -23,7 +22,7 @@ const viewRouter = require('./routes/viewRouter');
 
 const app = express();
 
-//app.enable('trust proxy');  
+app.enable('trust proxy');  
 
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
@@ -33,16 +32,9 @@ app.set('viwes', path.join(__dirname, 'views'))
 
 app.use(cors());
 app.options('*', cors());
+// app.options('/api/v1/tours/:id', cors());
 
-// const cspConfig = {
-//   directives: {
-//     defaultSrc: ["'self'"],
-//     imgSrc: ["'self'", 'data:', 'https://tile.openstreetmap.org/'],
-//     scriptSrc: ["'self'", 'https://cdnjs.cloudflare.com', 'https://js.stripe.com'],
-//     connectSrc: ["'self'", "ws://127.0.0.1:46009", "ws://127.0.0.1:33301"],  // Allow WebSocket connections
-//     frameSrc: ["'self'", 'https://js.stripe.com'],  // Allow framing from Stripe
-//   }
-// };
+
 const cspConfig = {
   directives: {
     defaultSrc: ["'self'"],
@@ -68,6 +60,10 @@ if (process.env.NODE_ENV === 'development') {
 
 // set limit request from same API
 const limiter = rateLimit({
+  validate: {
+		validationsConfig: false,
+		default: true,
+	},
   max: 100,
   windowMs: 60 * 60 * 1000,
   message: 'Too Many requests from this IP, Please try again in an hour!',
@@ -99,7 +95,7 @@ app.use(
     ],
   })
 );
-
+// to compress the text size, when you deploy your application into server
 app.use(compression());
 
 

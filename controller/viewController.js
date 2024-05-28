@@ -87,3 +87,21 @@ exports.updateUserData = catchAsync( async (req, res, next) => {
     user: updatedUser,
   });
 });
+
+exports.getMyReviews = catchAsync (async (req, res, next) => {
+  //  find all reviews
+  const reviews = await Review.findById({ user: res.locals.user.id}).populate({
+    path: 'tour',
+    select: 'name slug',
+  })
+
+
+  res.status(200).render('reviews', {
+    title: 'My Reviews',
+    reviews,
+    toursName: true,
+
+  })
+
+  
+});
