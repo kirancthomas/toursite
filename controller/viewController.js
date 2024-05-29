@@ -6,6 +6,14 @@ const AppError = require('../utils/appError');
 const User = require('../models/userModel');
 const Review = require('../models/reviewModel');
 
+exports.alerts = (req, res, next) => {
+const {alert} = req.query;
+
+  if(alert === 'booking') 
+    res.locals.alert = 
+    "Your booking was successful! Please check your email for confirmation.If your booking doesn\'t Show up immediatly, Please come back later."; 
+  next();
+};
 
 
 exports.overView = catchAsync(async (req, res, next) => {
