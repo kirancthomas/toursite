@@ -64,7 +64,7 @@ userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
 
   // hash the password with cost of 12
-  this.password = await(this.password, 12);
+  this.password = await(this.password);
 
   //delete the passwordConfirm field
   this.passwordConfirm = undefined;
